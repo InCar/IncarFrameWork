@@ -69,22 +69,6 @@ public class ShiroConfiguration {
     }
 
     /**
-     * 验证生命周期
-     * @return
-     */
-//    @Bean(name = "lifecycleBeanPostProcessor")
-//    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
-//        return new LifecycleBeanPostProcessor();
-//    }
-
-//    @Bean
-//    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator(){
-//        DefaultAdvisorAutoProxyCreator creator = new DefaultAdvisorAutoProxyCreator();
-//        creator.setProxyTargetClass(true);
-//        return creator;
-//    }
-
-    /**
      * 安全管理器
      * @param realm
      * @return
