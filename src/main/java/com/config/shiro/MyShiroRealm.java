@@ -1,12 +1,16 @@
 package com.config.shiro;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.record.TextObjectRecord;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -20,7 +24,10 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override  
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //UsernamePasswordToken用于存放提交的登录信息
-        return null;
+        UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
+        //在这里进行登录验证
+        SimpleAuthenticationInfo simpleAuthenticationInfo= new SimpleAuthenticationInfo("username", "password", getName());
+        return simpleAuthenticationInfo;
     }
   
     /**  
@@ -36,6 +43,17 @@ public class MyShiroRealm extends AuthorizingRealm {
      */  
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        Object user= super.getAvailablePrincipal(principals);
+        if(user!=null) {
+            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+            Set<String> roleSet=new HashSet<>();
+            Set<String> permissionSet=new HashSet<>();
+            //设置role
+            info.setRoles(roleSet);
+            //设置权限
+            info.setStringPermissions(permissionSet);
+        }
+        //返回null将会导致用户访问任何被拦截的请求时都会自动跳转到unauthorizedUrl指定的地址
         return null;
     }
 
