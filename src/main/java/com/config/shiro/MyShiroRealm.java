@@ -1,24 +1,12 @@
 package com.config.shiro;
 
-import com.base.condition.BaseCondition;
-import com.base.condition.impl.NumberCondition;
-import com.base.condition.impl.StringCondition;
-import com.sys.bean.MenuBean;
-import com.sys.bean.UserBean;
-import com.sys.service.UserService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -26,33 +14,14 @@ public class MyShiroRealm extends AuthorizingRealm {
     private static final Logger logger = Logger.getLogger(MyShiroRealm.class);
 
 
-    @Autowired
-    private UserService userService;
-
     /**
      * 登录认证
      */  
     @Override  
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //UsernamePasswordToken用于存放提交的登录信息
-        UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
-        UserBean user = userService.findOne(
-                BaseCondition.and(
-                    new StringCondition("username",token.getUsername(), StringCondition.Handler.EQUAL)
-                )
-        );
-
-        if(user !=null){
-            if(user.getStatus()==0){
-                throw new DisabledAccountException("Account Is Disabled!");
-            }
-            // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-            SimpleAuthenticationInfo simpleAuthenticationInfo= new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
-            simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(user.getUsername()));
-            return simpleAuthenticationInfo;
-        }
         return null;
-    }  
+    }
   
     /**  
      * 权限认证（为当前登录的Subject授予角色和权限）  
@@ -67,23 +36,7 @@ public class MyShiroRealm extends AuthorizingRealm {
      */  
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        UserBean user = (UserBean) super.getAvailablePrincipal(principals);
-        if(user!=null){
-            SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            userService.findOne(new NumberCondition("id",user.getId(), NumberCondition.Handler.EQUAL));
-            Set<String> roleSet=new HashSet<>();
-            Set<String> permissionSet=new HashSet<>();
-            user.getRoleBeanSet().forEach(role->{
-                roleSet.add(role.getCode());
-                role.getMenuBeanSet().forEach(menu->permissionSet.add(MenuBean.class.getSimpleName()+":"+menu.getId()));
-                role.getPermissionBeanSet().forEach(permission->permissionSet.add(permission.getCode()));
-            });
-            info.setRoles(roleSet);
-            info.setStringPermissions(permissionSet);
-            return info;
-        }
-         //返回null将会导致用户访问任何被拦截的请求时都会自动跳转到unauthorizedUrl指定的地址
-        return null;  
+        return null;
     }
 
     /**
