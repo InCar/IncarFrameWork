@@ -38,6 +38,9 @@ allprojects {
         compile("org.apache.shiro:shiro-ehcache:${shiroVersion}")
         compile("org.apache.shiro:shiro-cas:${shiroVersion}")
 
+        //commons lang通用包集成
+        compile("commons-lang:commons-lang:${commonslangVersion}")
+
         //poi 集成
         compile("org.apache.poi:poi:${poiVersion}")
         compile("org.apache.poi:poi-ooxml:${poiVersion}")

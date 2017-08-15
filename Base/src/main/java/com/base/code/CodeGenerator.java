@@ -460,7 +460,7 @@ public class CodeGenerator {
     }
 
     public static void main(String[] args) {
-        String path = "D:\\workSpace\\MySpringBootFrame\\Base\\src\\main\\java\\com\\base\\code";
+        String path = "D:\\workSpace\\IncarFrameWork\\Base\\src\\main\\java\\com\\base\\code";
         List<ConfigProperties> list = Arrays.asList(
                 new ConfigProperties(path, "User", "t_sys_user", "用户")
                 ,

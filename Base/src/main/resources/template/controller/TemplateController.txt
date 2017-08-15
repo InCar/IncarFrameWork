@@ -5,7 +5,6 @@ import com.base.condition.BaseCondition;
 import com.base.condition.impl.*;
 import com.base.controller.BaseController;
 import com.base.json.JsonMessage;
-import com.base.util.I18nUtil;
 import com.base.util.JsonUtil;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class @{upperModuleName}Controller extends BaseController {
     @ApiResponses(value = {@ApiResponse(code = 200,message = "保存@{moduleNameCN}")})
     public JsonMessage<String> save(@RequestBody @{upperModuleName}Bean @{lowerModuleName}){
         @{lowerModuleName}Service.save(@{lowerModuleName});
-        return JsonMessage.successed(I18nUtil.getMessage("COMMON.SAVE_SUCCESSED"));
+        return JsonMessage.successed("保存成功!");
     }
 
 
@@ -82,7 +81,7 @@ public class @{upperModuleName}Controller extends BaseController {
     @ApiResponses(value = {@ApiResponse(code = 200,message = "删除@{moduleNameCN}")})
     public JsonMessage<String> delete(@RequestParam Long[] @{lowerModuleName}IdArr){
         @{lowerModuleName}Service.delete(@{lowerModuleName}IdArr);
-        return JsonMessage.successed(I18nUtil.getMessage("COMMON.DELETE_SUCCESSED"));
+        return JsonMessage.successed("删除成功!");
     }
 
     /**
@@ -103,7 +102,7 @@ public class @{upperModuleName}Controller extends BaseController {
             @RequestParam(value = "fieldValue",required = true) String val){
         boolean flag = @{lowerModuleName}Service.isUnique(fieldName, val);
         if (flag==false){
-            return JsonMessage.failed(I18nUtil.getMessage("IsAvailable_FALSE"));
+            return JsonMessage.failed("存在重复的记录");
         }else {
             return JsonMessage.successed();
         }

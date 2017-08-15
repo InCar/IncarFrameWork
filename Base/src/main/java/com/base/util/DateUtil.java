@@ -124,11 +124,11 @@ public class DateUtil {
      * 将开始时间、结束时间 根据日期单位划分成 时间段
      * @param startDate
      * @param endDate
-     * @param calendarUnit Calendar.MONTH,Calendar.WEEK_OF_YEAR,Calendar.DATE
-     * @param dateNum 当 Calendar.DATE 时候指定天数
+     * @param calendarUnit Calendar.MONTH,Calendar.DATE
+     * @param dateNum 指定的单位日期数量
      * @return
      */
-    public static List<Date[]> parseSplitDate(Date startDate, Date endDate, int calendarUnit,int dateNum){
+    public static List<Date[]> splitDate(Date startDate, Date endDate, int calendarUnit,int dateNum){
         List<Date[]> returnList=new ArrayList<>();
         if(startDate.getTime()>endDate.getTime()){
             return null;
@@ -160,21 +160,6 @@ public class DateUtil {
 
 
     /**
-     * 计算两个时间相差多少天
-     * @param dateBegin 开始时间
-     * @param dateEnd 结束时间
-     * @return 相差天数
-     */
-    public static int getDateDiff(Date dateBegin,Date dateEnd)
-    {
-        Long begin = dateBegin.getTime();
-        Long end = dateEnd.getTime();
-
-        return (int)((end-begin)/(1000*60*60*24));
-    }
-
-
-    /**
      * 会改变参数值
      * 格式化日期参数开始日期和结束日期
      * 格式规则为:
@@ -194,40 +179,5 @@ public class DateUtil {
             endC.add(Calendar.SECOND,-1);
             endDate.setTime(endC.getTimeInMillis());
         }
-    }
-
-
-    /**
-     * 将格式为yyyy-M-d,yyyy-MM-d,yyyy-M-dd,yyyy-MM-dd
-     * 统一转换成yyyy-MM-dd
-     * @param str
-     * @return
-     */
-    public static Date stringToDate(String str){
-        Date date = null;
-        String[] splitStr = str.split("-");
-        if (splitStr[1].length()==1){
-            splitStr[1] = "0"+splitStr[1];
-        }
-        if (splitStr[2].length()==1){
-            splitStr[2] = "0"+splitStr[2];
-        }
-        StringBuffer sb = new StringBuffer();
-        for (int i=0;i<splitStr.length;i++){
-            if (i==splitStr.length-1){
-                sb.append(splitStr[i]);
-            }else {
-                sb.append(splitStr[i]);
-                sb.append("-");
-            }
-        }
-        String dateStr = sb.toString();
-        SimpleDateFormat simpleDateFormat= new SimpleDateFormat(DATE_FORMAT_DAY);
-        try {
-            date = simpleDateFormat.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
     }
 }
